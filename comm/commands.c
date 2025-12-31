@@ -700,15 +700,6 @@ void commands_process_packet(unsigned char *data, unsigned int len,
 		timeout_reset();
 		break;
 
-	case COMM_GET_DECODED_PPM: {
-		int32_t ind = 0;
-		uint8_t send_buffer[50];
-		send_buffer[ind++] = COMM_GET_DECODED_PPM;
-		buffer_append_int32(send_buffer, (int32_t)(app_ppm_get_decoded_level() * 1000000.0), &ind);
-		buffer_append_int32(send_buffer, (int32_t)(servodec_get_last_pulse_len(0) * 1000000.0), &ind);
-		reply_func(send_buffer, ind);
-	} break;
-
 	case COMM_GET_DECODED_ADC: {
 		int32_t ind = 0;
 		uint8_t send_buffer[50];

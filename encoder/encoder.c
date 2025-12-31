@@ -212,7 +212,6 @@ bool encoder_init(volatile mc_configuration *conf) {
 		conf_general_read_app_configuration(appconf);
 		if (appconf->app_to_use == APP_ADC ||
 				appconf->app_to_use == APP_UART ||
-				appconf->app_to_use == APP_PPM_UART ||
 				appconf->app_to_use == APP_ADC_UART) {
 			appconf->app_to_use = APP_NONE;
 			app_set_configuration(appconf);

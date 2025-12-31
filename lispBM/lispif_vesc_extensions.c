@@ -1739,18 +1739,6 @@ static lbm_value ext_app_adc_range_ok(lbm_value *args, lbm_uint argn) {
 	return app_adc_range_ok() ? ENC_SYM_TRUE : ENC_SYM_NIL;
 }
 
-static lbm_value ext_app_ppm_detach(lbm_value *args, lbm_uint argn) {
-	LBM_CHECK_ARGN_NUMBER(1);
-	app_ppm_detach(lbm_dec_as_u32(args[0]) > 0);
-	return ENC_SYM_TRUE;
-}
-
-static lbm_value ext_app_ppm_override(lbm_value *args, lbm_uint argn) {
-	LBM_CHECK_ARGN_NUMBER(1);
-	app_ppm_override(lbm_dec_as_float(args[0]));
-	return ENC_SYM_TRUE;
-}
-
 static lbm_value ext_set_remote_state(lbm_value *args, lbm_uint argn) {
 	LBM_CHECK_ARGN_NUMBER(5);
 	chuck_data chuk = {0};
@@ -3194,7 +3182,6 @@ static lbm_value ext_uart_start(lbm_value *args, lbm_uint argn) {
 	app_configuration *appconf = mempools_alloc_appconf();
 	conf_general_read_app_configuration(appconf);
 	if (appconf->app_to_use == APP_UART ||
-			appconf->app_to_use == APP_PPM_UART ||
 			appconf->app_to_use == APP_ADC_UART) {
 		appconf->app_to_use = APP_NONE;
 		conf_general_store_app_configuration(appconf);
@@ -3448,7 +3435,6 @@ static lbm_value ext_i2c_start(lbm_value *args, lbm_uint argn) {
 		conf_general_read_app_configuration(appconf);
 
 		if (appconf->app_to_use == APP_UART ||
-				appconf->app_to_use == APP_PPM_UART ||
 				appconf->app_to_use == APP_ADC_UART) {
 			appconf->app_to_use = APP_NONE;
 			conf_general_store_app_configuration(appconf);
@@ -6093,8 +6079,6 @@ void lispif_load_vesc_extensions(bool main_found) {
 		lbm_add_extension("app-adc-detach", ext_app_adc_detach);
 		lbm_add_extension("app-adc-override", ext_app_adc_override);
 		lbm_add_extension("app-adc-range-ok", ext_app_adc_range_ok);
-		lbm_add_extension("app-ppm-detach", ext_app_ppm_detach);
-		lbm_add_extension("app-ppm-override", ext_app_ppm_override);
 		lbm_add_extension("set-remote-state", ext_set_remote_state);
 		lbm_add_extension("app-disable-output", ext_app_disable_output);
 		lbm_add_extension("app-is-output-disabled", ext_app_is_output_disabled);

@@ -60,7 +60,6 @@ void app_set_configuration(app_configuration *conf) {
 	appconf = *conf;
 
 	if (app_changed) {
-		app_ppm_stop();
 		app_adc_stop();
 		app_uartcomm_stop(UART_PORT_COMM_HEADER);
 		app_nunchuk_stop();
@@ -82,9 +81,7 @@ void app_set_configuration(app_configuration *conf) {
 	imu_init(&conf->imu_conf);
 
 	if (app_changed) {
-		if (appconf.app_to_use != APP_PPM &&
-				appconf.app_to_use != APP_PPM_UART &&
-				appconf.servo_out_enable) {
+		if (appconf.servo_out_enable) {
 			servodec_stop();
 			pwm_servo_init_servo();
 		} else {
@@ -92,22 +89,12 @@ void app_set_configuration(app_configuration *conf) {
 		}
 
 		switch (appconf.app_to_use) {
-		case APP_PPM:
-			app_ppm_start();
-			break;
-
 		case APP_ADC:
 			app_adc_start(true);
 			break;
 
 		case APP_UART:
 			hw_stop_i2c();
-			app_uartcomm_start(UART_PORT_COMM_HEADER);
-			break;
-
-		case APP_PPM_UART:
-			hw_stop_i2c();
-			app_ppm_start();
 			app_uartcomm_start(UART_PORT_COMM_HEADER);
 			break;
 
@@ -149,7 +136,6 @@ void app_set_configuration(app_configuration *conf) {
 		}
 	}
 
-	app_ppm_configure(&appconf.app_ppm_conf);
 	app_adc_configure(&appconf.app_adc_conf);
 	app_pas_configure(&appconf.app_pas_conf);
 	app_uartcomm_configure(appconf.app_uart_baudrate, true, UART_PORT_COMM_HEADER);
